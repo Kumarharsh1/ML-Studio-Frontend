@@ -1,7 +1,36 @@
 ﻿/**
  * ML STUDIO - MAIN APPLICATION FILE
- * Version: 4.0 - COMPLETE FIXED VERSION
+ * Version: 4.0 - COMPLETE FIXED VERSION WITH ENVIRONMENT VARIABLES
  */
+
+// ============================================================================
+// CONFIGURATION - ENVIRONMENT VARIABLES
+// ============================================================================
+
+const Config = {
+    // Get backend URL from environment variable or use localhost as fallback
+    API_URL: typeof process !== 'undefined' && process.env && process.env.REACT_APP_API_URL 
+        ? process.env.REACT_APP_API_URL 
+        : 'http://localhost:5000',
+    
+    // Other configuration settings
+    MAX_FILE_SIZE: 500 * 1024 * 1024, // 500MB
+    ALLOWED_FILE_TYPES: ['.csv', '.xlsx', '.xls'],
+    
+    // Endpoints
+    ENDPOINTS: {
+        HEALTH: '/health',
+        UPLOAD: '/upload',
+        ANALYZE: '/analyze',
+        LIST_DATASETS: '/list_datasets',
+        DATASET_INFO: '/dataset_info',
+        GET_COLUMNS: '/get_columns',
+        DELETE: '/delete'
+    }
+};
+
+// Freeze the config object to prevent modifications
+Object.freeze(Config);
 
 // ============================================================================
 // APPLICATION STATE MANAGEMENT
@@ -13,11 +42,12 @@ const AppState = {
     isUploading: false,
     isAnalyzing: false,
     backendConnected: false,
-    baseURL: 'http://localhost:5000',
+    baseURL: Config.API_URL,
     
     init() {
         console.log('🚀 ML Studio Initializing...');
         console.log(`📍 Backend URL: ${this.baseURL}`);
+        console.log(`🔧 Environment: ${typeof process !== 'undefined' && process.env && process.env.NODE_ENV ? process.env.NODE_ENV : 'development'}`);
         
         // Load saved state
         this.load();
@@ -74,7 +104,7 @@ const AppState = {
     
     async checkBackend() {
         try {
-            const response = await fetch(`${this.baseURL}/health`, {
+            const response = await fetch(`${this.baseURL}${Config.ENDPOINTS.HEALTH}`, {
                 method: 'GET',
                 mode: 'cors',
                 headers: {
@@ -214,13 +244,13 @@ const AppState = {
 // ============================================================================
 
 const API = {
-    baseURL: 'http://localhost:5000',
+    baseURL: Config.API_URL,
     
     async uploadFile(file) {
         const formData = new FormData();
         formData.append('file', file);
         
-        const response = await fetch(`${this.baseURL}/upload`, {
+        const response = await fetch(`${this.baseURL}${Config.ENDPOINTS.UPLOAD}`, {
             method: 'POST',
             body: formData,
             mode: 'cors',
@@ -236,7 +266,7 @@ const API = {
     },
     
     async analyze(data) {
-        const response = await fetch(`${this.baseURL}/analyze`, {
+        const response = await fetch(`${this.baseURL}${Config.ENDPOINTS.ANALYZE}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data),
@@ -253,7 +283,7 @@ const API = {
     },
     
     async getColumns(filename) {
-        const response = await fetch(`${this.baseURL}/get_columns/${encodeURIComponent(filename)}`, {
+        const response = await fetch(`${this.baseURL}${Config.ENDPOINTS.GET_COLUMNS}/${encodeURIComponent(filename)}`, {
             mode: 'cors',
             credentials: 'omit'
         });
@@ -266,7 +296,7 @@ const API = {
     },
     
     async getDatasetInfo(filename) {
-        const response = await fetch(`${this.baseURL}/dataset_info/${encodeURIComponent(filename)}`, {
+        const response = await fetch(`${this.baseURL}${Config.ENDPOINTS.DATASET_INFO}/${encodeURIComponent(filename)}`, {
             mode: 'cors',
             credentials: 'omit'
         });
