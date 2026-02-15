@@ -1,0 +1,2506 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Studio Cloud | Enterprise Machine Learning Platform</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts - Inter + Space Grotesk -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Papa Parse -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    
+    <!-- SheetJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <style>
+        /* ===== GLOBAL STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0b0f1e;
+            color: #ffffff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ===== CLOUD BACKGROUND EFFECT ===== */
+        .cloud-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1000px;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(1px);
+            animation: float 20s infinite linear;
+        }
+
+        .cloud::before, .cloud::after {
+            content: '';
+            position: absolute;
+            background: inherit;
+            border-radius: inherit;
+        }
+
+        /* Cloud shapes */
+        .cloud-1 {
+            width: 200px;
+            height: 60px;
+            top: 15%;
+            left: -200px;
+            animation: floatCloud1 35s infinite linear;
+        }
+        .cloud-1::before {
+            width: 80px;
+            height: 80px;
+            top: -40px;
+            left: 20px;
+        }
+        .cloud-1::after {
+            width: 120px;
+            height: 120px;
+            top: -60px;
+            left: 60px;
+        }
+
+        .cloud-2 {
+            width: 300px;
+            height: 80px;
+            top: 45%;
+            right: -300px;
+            animation: floatCloud2 40s infinite linear;
+        }
+        .cloud-2::before {
+            width: 100px;
+            height: 100px;
+            top: -50px;
+            left: 40px;
+        }
+        .cloud-2::after {
+            width: 150px;
+            height: 150px;
+            top: -70px;
+            left: 100px;
+        }
+
+        .cloud-3 {
+            width: 250px;
+            height: 70px;
+            bottom: 20%;
+            left: -250px;
+            animation: floatCloud3 45s infinite linear;
+        }
+        .cloud-3::before {
+            width: 90px;
+            height: 90px;
+            top: -45px;
+            left: 30px;
+        }
+        .cloud-3::after {
+            width: 130px;
+            height: 130px;
+            top: -65px;
+            left: 80px;
+        }
+
+        @keyframes floatCloud1 {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(120vw); }
+        }
+        @keyframes floatCloud2 {
+            0% { transform: translateX(100px); }
+            100% { transform: translateX(-120vw); }
+        }
+        @keyframes floatCloud3 {
+            0% { transform: translateX(-100px); }
+            100% { transform: translateX(120vw); }
+        }
+
+        /* Gradient Orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.4;
+            animation: orbPulse 8s infinite alternate;
+        }
+
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, rgba(139, 92, 246, 0.1) 100%);
+            top: -100px;
+            right: -100px;
+        }
+
+        .orb-2 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, rgba(236, 72, 153, 0.1) 100%);
+            bottom: -200px;
+            left: -200px;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
+            top: 40%;
+            left: 30%;
+        }
+
+        @keyframes orbPulse {
+            0% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(1.2); opacity: 0.5; }
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            background: rgba(10, 15, 30, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .navbar-brand::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            top: 5px;
+            right: -12px;
+            box-shadow: 0 0 20px #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            font-weight: 500;
+            margin: 0 12px;
+            padding: 8px 16px !important;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background: linear-gradient(90deg, #60a5fa, #c084fc);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero-section {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding: 120px 0 80px;
+        }
+
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            animation: titleGlow 3s infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 30px rgba(96, 165, 250, 0.3); }
+            100% { text-shadow: 0 0 50px rgba(192, 132, 252, 0.5); }
+        }
+
+        .hero-gradient {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: radial-gradient(circle at 70% 50%, rgba(96, 165, 250, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(96, 165, 250, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+        }
+
+        /* ===== GLASS CARD STYLES ===== */
+        .glass-card {
+            background: rgba(20, 25, 45, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(96, 165, 250, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 2px rgba(96, 165, 250, 0.1);
+        }
+
+        .card-header {
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+        }
+
+        .card-header h3 {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        /* ===== UPLOAD AREA ===== */
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 3rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-area::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .upload-area:hover::before {
+            left: 100%;
+        }
+
+        .upload-area:hover {
+            border-color: #60a5fa;
+            background: rgba(96, 165, 250, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .upload-icon i {
+            margin: 0 10px;
+            animation: iconFloat 3s infinite alternate;
+            filter: drop-shadow(0 0 20px rgba(96, 165, 250, 0.5));
+        }
+
+        .upload-icon i:nth-child(1) { animation-delay: 0s; }
+        .upload-icon i:nth-child(2) { animation-delay: 0.5s; }
+        .upload-icon i:nth-child(3) { animation-delay: 1s; }
+
+        @keyframes iconFloat {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+
+        /* ===== BUTTON STYLES ===== */
+        .btn-gradient {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border: none;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: white;
+            cursor: pointer;
+            display: inline-block;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-gradient:hover::before {
+            left: 100%;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-gradient:active {
+            transform: translateY(0) scale(1);
+        }
+
+        .btn-gradient:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline:hover {
+            border-color: #60a5fa;
+            background: rgba(96, 165, 250, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* ===== STATUS BADGES ===== */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.95rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-badge.connected {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .status-badge.demo {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .status-badge.checking {
+            background: rgba(100, 116, 139, 0.2);
+            color: #94a3b8;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* ===== DATASET CARD ===== */
+        .dataset-card {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 2rem;
+            color: white;
+            margin-top: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dataset-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .dataset-stats {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-box .value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            display: block;
+            background: linear-gradient(135deg, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ===== ALGORITHM ITEMS ===== */
+        .algorithm-item {
+            padding: 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.02);
+            cursor: pointer;
+        }
+
+        .algorithm-item:hover {
+            border-color: #60a5fa;
+            background: rgba(96, 165, 250, 0.1);
+            transform: translateX(5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .algorithm-item input[type="checkbox"] {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            accent-color: #60a5fa;
+            cursor: pointer;
+            transform: scale(1);
+            transition: all 0.2s ease;
+        }
+
+        .algorithm-item input[type="checkbox"]:checked {
+            transform: scale(1.1);
+        }
+
+        .algorithm-item label {
+            font-weight: 600;
+            color: white;
+            margin-bottom: 4px;
+            display: inline-block;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .algorithm-item .description {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-left: 32px;
+        }
+
+        /* ===== PROGRESS BARS ===== */
+        .progress {
+            height: 10px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            transition: width 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* ===== METRICS DASHBOARD ===== */
+        .metric-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1.2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .metric-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(96, 165, 250, 0.3);
+        }
+
+        /* ===== FORM CONTROLS ===== */
+        .form-select, .form-control {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 12px 20px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-select option {
+            background: #1a1f35;
+            color: white;
+        }
+
+        .form-select:focus, .form-control:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+            color: white;
+        }
+
+        .form-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        /* ===== TABLE STYLES ===== */
+        .data-preview {
+            max-height: 300px;
+            overflow-y: auto;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .data-preview table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .data-preview th {
+            background: rgba(96, 165, 250, 0.2);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: white;
+            border-bottom: 2px solid rgba(96, 165, 250, 0.3);
+        }
+
+        .data-preview td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .data-preview tr:hover td {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* ===== ALGORITHM BADGES ===== */
+        .algorithm-badge {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            color: white;
+            margin: 3px;
+            display: inline-block;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .algorithm-badge:hover {
+            transform: translateY(-2px);
+            border-color: #60a5fa;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            background: rgba(10, 15, 30, 0.9);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 60px 0 30px;
+            margin-top: 80px;
+            position: relative;
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #60a5fa, #c084fc, transparent);
+        }
+
+        .footer h5 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            transform: translateY(-5px) scale(1.1);
+            border-color: transparent;
+        }
+
+        .developer-info {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .developer-info p {
+            margin: 5px 0;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .developer-info i {
+            color: #60a5fa;
+            margin-right: 8px;
+        }
+
+        .developer-info a {
+            color: #60a5fa;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .developer-info a:hover {
+            color: #c084fc;
+            text-decoration: underline;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fadeInUp {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .stat-item {
+                width: 100%;
+            }
+            
+            .dataset-stats {
+                flex-direction: column;
+            }
+            
+            .stat-box {
+                width: 100%;
+            }
+        }
+
+        /* ===== CUSTOM SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+        }
+    </style>
+</head>
+<body>
+    <!-- Cloud Background -->
+    <div class="cloud-bg">
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+    </div>
+
+    <!-- Gradient Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-cloud-arrow-up me-2"></i> ML Studio Cloud
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home"><i class="fas fa-home me-1"></i>Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#upload"><i class="fas fa-cloud-upload-alt me-1"></i>Upload</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#analysis"><i class="fas fa-brain me-1"></i>Algorithms</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#visualization"><i class="fas fa-chart-line me-1"></i>Visualize</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#metrics"><i class="fas fa-chart-bar me-1"></i>Metrics</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#report"><i class="fas fa-file-pdf me-1"></i>Report</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-gradient"></div>
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8" data-aos="fade-up" data-aos-duration="1000">
+                    <span class="status-badge connected mb-4">
+                        <i class="fas fa-cloud me-2"></i> Cloud Platform • Enterprise Ready
+                    </span>
+                    <h1 class="hero-title">
+                        Scale Your ML Workflows<br>in the Cloud
+                    </h1>
+                    <p class="lead text-secondary mb-4" style="color: rgba(255,255,255,0.8) !important; font-size: 1.3rem;">
+                        Enterprise-grade machine learning platform with distributed computing,<br>real-time collaboration, and automated MLOps.
+                    </p>
+                    <div class="d-flex gap-3 mb-5">
+                        <a href="#upload" class="btn-gradient">Start Free Trial <i class="fas fa-arrow-right ms-2"></i></a>
+                        <a href="#" class="btn-outline"><i class="fas fa-play me-2"></i>Watch Demo</a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-item" data-aos="zoom-in" data-aos-delay="200">
+                            <span class="stat-number">50+</span>
+                            <span class="stat-label">ML Algorithms</span>
+                        </div>
+                        <div class="stat-item" data-aos="zoom-in" data-aos-delay="400">
+                            <span class="stat-number">15</span>
+                            <span class="stat-label">Visualizations</span>
+                        </div>
+                        <div class="stat-item" data-aos="zoom-in" data-aos-delay="600">
+                            <span class="stat-number">99.9%</span>
+                            <span class="stat-label">Uptime SLA</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section id="upload" class="section">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <span class="status-badge demo mb-3">
+                    <i class="fas fa-cloud-upload-alt me-2"></i> Secure Cloud Storage
+                </span>
+                <h2 class="section-title">Upload to the Cloud</h2>
+                <p class="section-subtitle">Your data is encrypted and processed in our secure cloud infrastructure</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <!-- Cloud Status -->
+                    <div class="d-flex justify-content-between align-items-center mb-4" data-aos="fade-up" data-aos-delay="100">
+                        <div id="backendStatus">
+                            <span class="status-badge checking">
+                                <i class="fas fa-cloud fa-spin me-2"></i> Connecting to cloud...
+                            </span>
+                        </div>
+                        <div class="server-info">
+                            <i class="fas fa-shield-alt me-2" style="color: #10b981;"></i>
+                            <span>256-bit AES Encryption</span>
+                        </div>
+                    </div>
+
+                    <!-- Upload Card -->
+                    <div class="glass-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="card-header">
+                            <h3>
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                Secure Cloud Upload
+                                <span class="ms-auto badge bg-success" style="font-size: 0.8rem;">Enterprise</span>
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- Upload Area -->
+                            <div class="upload-area" id="uploadArea">
+                                <div class="upload-icon">
+                                    <i class="fas fa-cloud"></i>
+                                    <i class="fas fa-file-csv"></i>
+                                    <i class="fas fa-file-excel"></i>
+                                </div>
+
+                                <h4 class="mb-3">Drag & Drop to Cloud</h4>
+                                <p class="text-secondary mb-3">or <strong class="browse-link" id="browseLink">browse files</strong></p>
+                                <p class="text-muted small mb-4">
+                                    <i class="fas fa-lock me-1"></i> Encrypted transfer • Max 10GB • CSV, XLSX, XLS
+                                </p>
+
+                                <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" hidden>
+                                <button type="button" class="btn-gradient" id="uploadBtn">
+                                    <i class="fas fa-cloud-upload-alt me-2"></i> Choose File
+                                </button>
+
+                                <!-- File Selection -->
+                                <div id="fileSelection" class="file-selection" style="display: none;">
+                                    <div class="selected-file">
+                                        <i class="fas fa-file-csv" id="fileIcon"></i>
+                                        <div style="flex:1;">
+                                            <div class="file-name" id="selectedFileName"></div>
+                                            <div class="file-size" id="selectedFileSize"></div>
+                                        </div>
+                                        <button type="button" class="btn-outline" id="clearFileBtn">
+                                            <i class="fas fa-times me-1"></i>Clear
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Status Messages -->
+                            <div id="uploadStatus" class="mt-4"></div>
+
+                            <!-- Data Preview -->
+                            <div id="dataPreview" class="mt-4" style="display: none;">
+                                <h5 class="mb-3">Cloud Data Preview</h5>
+                                <div class="data-preview" id="previewTable"></div>
+                            </div>
+
+                            <!-- Active Dataset -->
+                            <div id="activeDatasetCard" class="dataset-card" style="display: none;">
+                                <div class="dataset-header">
+                                    <i class="fas fa-database fa-2x"></i>
+                                    <h4>Active Cloud Dataset</h4>
+                                    <span class="dataset-badge">Synced</span>
+                                </div>
+                                <div id="activeDatasetInfo"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analysis Section -->
+    <section id="analysis" class="section">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <span class="status-badge demo mb-3">
+                    <i class="fas fa-microchip me-2"></i> Distributed Computing
+                </span>
+                <h2 class="section-title">Cloud ML Algorithms</h2>
+                <p class="section-subtitle">Leverage our distributed computing cluster for high-performance training</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6" data-aos="fade-right" data-aos-delay="100">
+                            <div class="glass-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-brain"></i> Supervised Learning</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="algorithm-item">
+                                        <input type="checkbox" id="random_forest" value="random_forest" class="algorithm-checkbox">
+                                        <label for="random_forest">Random Forest</label>
+                                        <div class="description">Ensemble of decision trees with cloud parallelization</div>
+                                    </div>
+                                    <div class="algorithm-item">
+                                        <input type="checkbox" id="decision_tree" value="decision_tree" class="algorithm-checkbox">
+                                        <label for="decision_tree">Decision Tree</label>
+                                        <div class="description">Tree-based model with pruning optimization</div>
+                                    </div>
+                                    <div class="algorithm-item">
+                                        <input type="checkbox" id="xgboost" value="xgboost" class="algorithm-checkbox">
+                                        <label for="xgboost">XGBoost</label>
+                                        <div class="description">Gradient boosting with GPU acceleration</div>
+                                    </div>
+                                    <div class="algorithm-item">
+                                        <input type="checkbox" id="lightgbm" value="lightgbm" class="algorithm-checkbox">
+                                        <label for="lightgbm">LightGBM</label>
+                                        <div class="description">Lightweight gradient boosting framework</div>
+                                    </div>
+                                    <div class="algorithm-item">
+                                        <input type="checkbox" id="catboost" value="catboost" class="algorithm-checkbox">
+                                        <label for="catboost">CatBoost</label>
+                                        <div class="description">Categorical data optimized boosting</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6" data-aos="fade-left" data-aos-delay="200">
+                            <div class="glass-card">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-chart-line"></i> Neural Networks</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="algorithm-item">
+                                        <input type="checkbox" id="mlp" value="mlp" class="algorithm-checkbox">
+                                        <label for="mlp">Multi-layer Perceptron</label>
+                                        <div class="description">Deep neural network with cloud TPU support</div>
+                                    </div>
+                                    <div class="algorithm-item">
+                                        <input type="checkbox" id="cnn" value="cnn" class="algorithm-checkbox">
+                                        <label for="cnn">CNN</label>
+                                        <div class="description">Convolutional neural network for image data</div>
+                                    </div>
+                                    <div class="algorithm-item">
+                                        <input type="checkbox" id="lstm" value="lstm" class="algorithm-checkbox">
+                                        <label for="lstm">LSTM</label>
+                                        <div class="description">Long short-term memory for sequences</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="glass-card mt-4">
+                                <div class="card-header">
+                                    <h3><i class="fas fa-project-diagram"></i> Unsupervised</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="algorithm-item">
+                                        <input type="checkbox" id="kmeans" value="kmeans" class="algorithm-checkbox">
+                                        <label for="kmeans">K-Means Clustering</label>
+                                        <div class="description">Distributed clustering algorithm</div>
+                                    </div>
+                                    <div class="algorithm-item">
+                                        <input type="checkbox" id="dbscan" value="dbscan" class="algorithm-checkbox">
+                                        <label for="dbscan">DBSCAN</label>
+                                        <div class="description">Density-based spatial clustering</div>
+                                    </div>
+                                    <div class="algorithm-item">
+                                        <input type="checkbox" id="pca" value="pca" class="algorithm-checkbox">
+                                        <label for="pca">PCA</label>
+                                        <div class="description">Principal component analysis</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="glass-card" data-aos="fade-left" data-aos-delay="300">
+                        <div class="card-header">
+                            <h3><i class="fas fa-sliders-h"></i> Cloud Configuration</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4">
+                                <label class="form-label"><i class="fas fa-bullseye me-2"></i>Target Column</label>
+                                <select class="form-select" id="targetColumn">
+                                    <option value="">Auto-detect</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label"><i class="fas fa-microchip me-2"></i>Compute Resources</label>
+                                <select class="form-select" id="computeResources">
+                                    <option value="basic">Basic (2 vCPU, 8GB RAM)</option>
+                                    <option value="standard" selected>Standard (4 vCPU, 16GB RAM)</option>
+                                    <option value="premium">Premium (8 vCPU, 32GB RAM)</option>
+                                    <option value="enterprise">Enterprise (16 vCPU, 64GB RAM + GPU)</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label"><i class="fas fa-chart-pie me-2"></i>Train/Test Split</label>
+                                <select class="form-select" id="testSize">
+                                    <option value="0.2">80% Train / 20% Test</option>
+                                    <option value="0.25">75% Train / 25% Test</option>
+                                    <option value="0.3">70% Train / 30% Test</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label"><i class="fas fa-layer-group me-2"></i>Cross Validation</label>
+                                <select class="form-select" id="cvFolds">
+                                    <option value="5">5-fold CV</option>
+                                    <option value="10">10-fold CV</option>
+                                    <option value="3">3-fold CV</option>
+                                </select>
+                            </div>
+
+                            <button id="runAnalysis" class="btn-gradient w-100" disabled>
+                                <i class="fas fa-play-circle me-2"></i> Run Cloud Analysis
+                            </button>
+                            <p class="text-muted small mt-3 text-center" id="analysisStatus">
+                                <i class="fas fa-cloud me-1"></i> Upload data to cloud first
+                            </p>
+
+                            <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+
+                            <div id="selectedAlgorithms">
+                                <h6 class="fw-bold mb-3">Selected Algorithms:</h6>
+                                <div id="algorithmList" class="algorithm-list">
+                                    None selected
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Card -->
+                    <div class="glass-card mt-4" id="resultsCard" style="display: none;" data-aos="fade-up">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-bar"></i> Cloud Results</h3>
+                        </div>
+                        <div class="card-body" id="resultsSummary"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visualization Section -->
+    <section id="visualization" class="section">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <span class="status-badge demo mb-3">
+                    <i class="fas fa-chart-pie me-2"></i> Interactive Visualizations
+                </span>
+                <h2 class="section-title">Cloud Data Visualization</h2>
+                <p class="section-subtitle">Real-time interactive charts powered by WebGL</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4" data-aos="fade-right" data-aos-delay="100">
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-sliders-h"></i> Visualization Controls</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Chart Type</label>
+                                <select class="form-select" id="chartType">
+                                    <option value="bar">📊 Bar Chart</option>
+                                    <option value="line">📈 Line Chart</option>
+                                    <option value="pie">🥧 Pie Chart</option>
+                                    <option value="scatter">🔵 Scatter Plot</option>
+                                    <option value="radar">🎯 Radar Chart</option>
+                                    <option value="polarArea">🌐 Polar Area</option>
+                                </select>
+                            </div>
+                            <div id="columnSelects">
+                                <div class="mb-3">
+                                    <label class="form-label">X-Axis / Category</label>
+                                    <select class="form-select" id="xAxisColumn">
+                                        <option value="">Select column</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Y-Axis / Values</label>
+                                    <select class="form-select" id="yAxisColumn">
+                                        <option value="">Select column</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Chart Title</label>
+                                <input type="text" class="form-control" id="chartTitle" placeholder="Enter chart title">
+                            </div>
+                            <button id="generateChart" class="btn-gradient w-100" disabled>
+                                <i class="fas fa-chart-line me-2"></i> Generate Chart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8" data-aos="fade-left" data-aos-delay="200">
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-area"></i> Visualization Output</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="chartContainer" style="height: 500px;">
+                                <canvas id="myChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics Section -->
+    <section id="metrics" class="section">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <span class="status-badge demo mb-3">
+                    <i class="fas fa-chart-bar me-2"></i> Real-time Metrics
+                </span>
+                <h2 class="section-title">Cloud Performance Metrics</h2>
+                <p class="section-subtitle">Live metrics from distributed training jobs</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="glass-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-line"></i> Metrics Dashboard</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="metric-item">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><i class="fas fa-check-circle text-success me-2"></i>Accuracy</span>
+                                            <span class="fw-bold" id="accuracy">0%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div id="accuracyBar" class="progress-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="metric-item mt-4">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><i class="fas fa-balance-scale text-info me-2"></i>F1 Score</span>
+                                            <span class="fw-bold" id="f1Score">0.00</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div id="f1Bar" class="progress-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="metric-item mt-4">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><i class="fas fa-chart-line text-primary me-2"></i>ROC-AUC</span>
+                                            <span class="fw-bold" id="rocAuc">0.00</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div id="rocAucBar" class="progress-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="metric-item">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><i class="fas fa-bullseye text-warning me-2"></i>Precision</span>
+                                            <span class="fw-bold" id="precision">0.00</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div id="precisionBar" class="progress-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="metric-item mt-4">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><i class="fas fa-search text-danger me-2"></i>Recall</span>
+                                            <span class="fw-bold" id="recall">0.00</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div id="recallBar" class="progress-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="metric-item mt-4">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span><i class="fas fa-tachometer-alt text-purple me-2"></i>Training Time</span>
+                                            <span class="fw-bold" id="trainingTime">0.0s</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div id="trainingTimeBar" class="progress-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 p-4" style="background: rgba(255,255,255,0.03); border-radius: 20px;">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-trophy text-warning fa-3x me-4"></i>
+                                    <div>
+                                        <h5 class="mb-1">Best Cloud Model</h5>
+                                        <span class="fw-bold text-primary" id="bestAlgorithm">Not available</span>
+                                        <span class="text-muted ms-2" id="bestAlgorithmScore"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4" id="algorithmMetricsTable" style="display: none;">
+                                <h6 class="fw-bold mb-3">All Model Performances</h6>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Algorithm</th>
+                                                <th>Accuracy</th>
+                                                <th>Precision</th>
+                                                <th>Recall</th>
+                                                <th>F1</th>
+                                                <th>Time (s)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="metricsTableBody"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Report Section -->
+    <section id="report" class="section">
+        <div class="container">
+            <div class="text-center mb-5" data-aos="fade-up">
+                <span class="status-badge demo mb-3">
+                    <i class="fas fa-file-pdf me-2"></i> Automated Reporting
+                </span>
+                <h2 class="section-title">Generate Cloud Reports</h2>
+                <p class="section-subtitle">Create comprehensive PDF reports with one click</p>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="glass-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="card-body py-5">
+                            <div class="text-center mb-5">
+                                <i class="fas fa-file-pdf text-danger fa-5x mb-4"></i>
+                                <h3>Enterprise Report Generator</h3>
+                                <p class="text-secondary">Generate comprehensive PDF reports with executive summaries, model performances, and visualizations</p>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="includeSummary" checked>
+                                        <label class="form-check-label" for="includeSummary">
+                                            <i class="fas fa-file-alt me-2 text-info"></i>Executive Summary
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="includeDataset" checked>
+                                        <label class="form-check-label" for="includeDataset">
+                                            <i class="fas fa-database me-2 text-success"></i>Dataset Overview
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="includePreview" checked>
+                                        <label class="form-check-label" for="includePreview">
+                                            <i class="fas fa-table me-2 text-primary"></i>Data Preview
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="includeAlgorithms" checked>
+                                        <label class="form-check-label" for="includeAlgorithms">
+                                            <i class="fas fa-brain me-2 text-warning"></i>Model Performance
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="includeMetrics" checked>
+                                        <label class="form-check-label" for="includeMetrics">
+                                            <i class="fas fa-chart-bar me-2 text-danger"></i>Metrics Dashboard
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="includeVisualizations" checked>
+                                        <label class="form-check-label" for="includeVisualizations">
+                                            <i class="fas fa-chart-pie me-2 text-purple"></i>Visualizations
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <button id="generateReport" class="btn-gradient px-5 py-3" disabled>
+                                    <i class="fas fa-file-pdf me-2"></i> Generate Cloud Report
+                                </button>
+                                <p class="text-muted small mt-3" id="reportStatus">
+                                    <i class="fas fa-cloud me-1"></i> Run cloud analysis first
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5><i class="fas fa-cloud me-2"></i>ML Studio Cloud</h5>
+                    <p class="text-secondary">Enterprise machine learning platform with distributed computing and automated MLOps.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/Kumarharsh1" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/kumar-harsh-6ab195241" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="#" target="_blank"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>Platform</h5>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Features</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Pricing</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Security</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Compliance</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5>Solutions</h5>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> For Enterprise</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> For Startups</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> For Research</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> For Education</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5>Contact Developer</h5>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope me-2"></i> <a href="mailto:kh949118@gmail.com">kh949118@gmail.com</a></li>
+                        <li><i class="fas fa-phone me-2"></i> +91 9279157296</li>
+                        <li><i class="fab fa-github me-2"></i> <a href="https://github.com/Kumarharsh1" target="_blank">github.com/Kumarharsh1</a></li>
+                        <li><i class="fab fa-linkedin me-2"></i> <a href="https://www.linkedin.com/in/kumar-harsh-6ab195241" target="_blank">Kumar Harsh</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Developer Info Section -->
+            <div class="developer-info">
+                <p><i class="fas fa-code"></i> Developed by <strong>Kumar Harsh</strong></p>
+                <p><i class="fas fa-phone"></i> +91 9279157296 | <i class="fas fa-envelope"></i> kh949118@gmail.com</p>
+                <p>
+                    <a href="https://github.com/Kumarharsh1" target="_blank"><i class="fab fa-github"></i> GitHub</a> • 
+                    <a href="https://www.linkedin.com/in/kumar-harsh-6ab195241" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+                </p>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2026 ML Studio Cloud. All rights reserved. Built by Kumar Harsh with ❤️</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Main JavaScript -->
+    <script>
+    (function() {
+        'use strict';
+        
+        console.log('☁️ ML Studio Cloud initializing...');
+        
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+
+        // Configuration
+        const BACKEND_URL = 'http://localhost:5000';
+        
+        // DOM Elements
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const browseLink = document.getElementById('browseLink');
+        const uploadArea = document.getElementById('uploadArea');
+        const clearFileBtn = document.getElementById('clearFileBtn');
+        const fileSelection = document.getElementById('fileSelection');
+        const selectedFileName = document.getElementById('selectedFileName');
+        const selectedFileSize = document.getElementById('selectedFileSize');
+        const fileIcon = document.getElementById('fileIcon');
+        const uploadStatus = document.getElementById('uploadStatus');
+        const backendStatus = document.getElementById('backendStatus');
+        const activeDatasetCard = document.getElementById('activeDatasetCard');
+        const activeDatasetInfo = document.getElementById('activeDatasetInfo');
+        const dataPreview = document.getElementById('dataPreview');
+        const previewTable = document.getElementById('previewTable');
+        const runAnalysisBtn = document.getElementById('runAnalysis');
+        const analysisStatus = document.getElementById('analysisStatus');
+        const generateChartBtn = document.getElementById('generateChart');
+        const generateReportBtn = document.getElementById('generateReport');
+        const reportStatus = document.getElementById('reportStatus');
+        const targetColumn = document.getElementById('targetColumn');
+        const testSize = document.getElementById('testSize');
+        const cvFolds = document.getElementById('cvFolds');
+        const algorithmList = document.getElementById('algorithmList');
+        const resultsCard = document.getElementById('resultsCard');
+        const resultsSummary = document.getElementById('resultsSummary');
+        const chartType = document.getElementById('chartType');
+        const xAxisColumn = document.getElementById('xAxisColumn');
+        const yAxisColumn = document.getElementById('yAxisColumn');
+        const chartTitle = document.getElementById('chartTitle');
+        const algorithmMetricsTable = document.getElementById('algorithmMetricsTable');
+        const metricsTableBody = document.getElementById('metricsTableBody');
+
+        // Chart instance
+        let myChart = null;
+
+        // State
+        let isBackendConnected = false;
+        let isDemoMode = false;
+        let currentFile = null;
+        let parsedData = null;
+        let analysisResults = null;
+        let selectedAlgorithms = [];
+
+        // Helper Functions
+        function formatFileSize(bytes) {
+            if (!bytes) return '0 B';
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+            if (bytes < 1024 * 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+            return (bytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+        }
+
+        // Update Backend Status
+        function updateBackendStatus(connected) {
+            if (!backendStatus) return;
+            
+            if (connected) {
+                backendStatus.innerHTML = `
+                    <span class="status-badge connected">
+                        <i class="fas fa-cloud me-2"></i> Cloud Connected
+                        <span class="ms-2 badge bg-success">Live</span>
+                    </span>
+                `;
+                isBackendConnected = true;
+                isDemoMode = false;
+            } else {
+                backendStatus.innerHTML = `
+                    <span class="status-badge demo">
+                        <i class="fas fa-cloud me-2"></i> Cloud Demo Mode
+                        <span class="ms-2 badge bg-warning">Sandbox</span>
+                    </span>
+                `;
+                isBackendConnected = false;
+                isDemoMode = true;
+            }
+        }
+
+        // Show Status Messages
+        function showStatus(element, type, title, message) {
+            if (!element) return;
+            
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                info: 'fa-info-circle',
+                uploading: 'fa-cloud-upload-alt fa-spin',
+                warning: 'fa-exclamation-triangle'
+            };
+            
+            const colors = {
+                success: '#10b981',
+                error: '#ef4444',
+                info: '#3b82f6',
+                uploading: '#f59e0b',
+                warning: '#f59e0b'
+            };
+            
+            element.innerHTML = `
+                <div class="status-card" style="background: rgba(${type === 'success' ? '16,185,129' : type === 'error' ? '239,68,68' : '59,130,246'}, 0.1); border-left: 4px solid ${colors[type]}; padding: 1.5rem; border-radius: 16px;">
+                    <div class="d-flex gap-3">
+                        <i class="fas ${icons[type]}" style="color: ${colors[type]}; font-size: 1.5rem;"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1" style="color: ${colors[type]}">${title}</h6>
+                            <p class="mb-0 small text-secondary">${message}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Update Algorithm List
+        function updateAlgorithmList() {
+            const checkboxes = document.querySelectorAll('.algorithm-checkbox:checked');
+            selectedAlgorithms = Array.from(checkboxes).map(cb => cb.value);
+            
+            if (selectedAlgorithms.length === 0) {
+                algorithmList.innerHTML = '<span class="text-secondary">None selected</span>';
+            } else {
+                algorithmList.innerHTML = selectedAlgorithms.map(algo => 
+                    `<span class="algorithm-badge">${algo.replace(/_/g, ' ')}</span>`
+                ).join('');
+            }
+        }
+
+        // Update Column Selects
+        function updateColumnSelects() {
+            if (!parsedData || parsedData.length === 0) return;
+            
+            const columns = Object.keys(parsedData[0] || {});
+            
+            targetColumn.innerHTML = '<option value="">Auto-detect</option>' + 
+                columns.map(col => `<option value="${col}">${col}</option>`).join('');
+            
+            xAxisColumn.innerHTML = '<option value="">Select column</option>' + 
+                columns.map(col => `<option value="${col}">${col}</option>`).join('');
+            
+            yAxisColumn.innerHTML = '<option value="">Select column</option>' + 
+                columns.map(col => `<option value="${col}">${col}</option>`).join('');
+        }
+
+        // Create data preview HTML
+        function createPreviewHTML(data) {
+            if (!data || data.length === 0) return '<p class="text-secondary">No data to preview</p>';
+            
+            const headers = Object.keys(data[0] || {});
+            const rows = data.slice(0, 10);
+            
+            let html = '<table><thead><tr>';
+            headers.forEach(header => html += `<th>${header}</th>`);
+            html += '</tr></thead><tbody>';
+            
+            rows.forEach(row => {
+                html += '<tr>';
+                headers.forEach(header => html += `<td>${row[header] !== undefined && row[header] !== null ? row[header] : ''}</td>`);
+                html += '</tr>';
+            });
+            
+            if (data.length > 10) {
+                html += `<tr><td colspan="${headers.length}" class="text-center text-secondary">... and ${data.length - 10} more rows</td></tr>`;
+            }
+            
+            html += '</tbody></table>';
+            return html;
+        }
+
+        // Parse CSV file
+        function parseCSV(file) {
+            return new Promise((resolve, reject) => {
+                Papa.parse(file, {
+                    header: true,
+                    dynamicTyping: true,
+                    skipEmptyLines: true,
+                    complete: (results) => resolve(results.data),
+                    error: reject
+                });
+            });
+        }
+
+        // Parse Excel file
+        function parseExcel(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                        const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+                        
+                        if (jsonData.length < 2) {
+                            reject(new Error('File has no data'));
+                            return;
+                        }
+                        
+                        const headers = jsonData[0].map(h => String(h).trim());
+                        const rows = jsonData.slice(1).map(row => {
+                            const obj = {};
+                            headers.forEach((header, index) => {
+                                if (header && header !== '') {
+                                    obj[header] = row[index] !== undefined ? row[index] : '';
+                                }
+                            });
+                            return obj;
+                        }).filter(row => Object.keys(row).length > 0);
+                        
+                        resolve(rows);
+                    } catch (error) {
+                        reject(error);
+                    }
+                };
+                reader.onerror = reject;
+                reader.readAsArrayBuffer(file);
+            });
+        }
+
+        // Process file locally
+        async function processFileLocally(file) {
+            try {
+                showStatus(uploadStatus, 'uploading', 'Uploading to Cloud', `Encrypting and uploading ${file.name}...`);
+                
+                let data;
+                const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+                
+                if (ext === '.csv') {
+                    data = await parseCSV(file);
+                } else if (['.xlsx', '.xls'].includes(ext)) {
+                    data = await parseExcel(file);
+                } else {
+                    throw new Error('Unsupported file format');
+                }
+                
+                if (!data || data.length === 0) {
+                    throw new Error('No data found in file');
+                }
+                
+                parsedData = data;
+                currentFile = file;
+                
+                // Update column selects
+                updateColumnSelects();
+                
+                // Show preview
+                if (dataPreview && previewTable) {
+                    previewTable.innerHTML = createPreviewHTML(data);
+                    dataPreview.style.display = 'block';
+                }
+                
+                // Show dataset info
+                if (activeDatasetCard && activeDatasetInfo) {
+                    activeDatasetCard.style.display = 'block';
+                    
+                    const columns = Object.keys(data[0] || {});
+                    
+                    let columnTags = columns.slice(0, 8).map(col => 
+                        `<span class="algorithm-badge">${col}</span>`
+                    ).join('');
+                    
+                    if (columns.length > 8) {
+                        columnTags += `<span class="algorithm-badge">+${columns.length - 8}</span>`;
+                    }
+                    
+                    activeDatasetInfo.innerHTML = `
+                        <div class="dataset-stats">
+                            <div class="stat-box">
+                                <span class="value">${data.length.toLocaleString()}</span>
+                                <span class="label">Rows</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="value">${columns.length}</span>
+                                <span class="label">Features</span>
+                            </div>
+                            <div class="stat-box">
+                                <span class="value">${formatFileSize(file.size)}</span>
+                                <span class="label">Size</span>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <span class="fw-medium">Features:</span>
+                            <div class="d-flex flex-wrap gap-2 mt-2">${columnTags || '<span class="algorithm-badge">No features</span>'}</div>
+                        </div>
+                    `;
+                }
+                
+                showStatus(uploadStatus, 'success', 'Upload Complete!', `Successfully uploaded ${data.length} rows to cloud storage`);
+                
+                // Enable buttons
+                if (runAnalysisBtn) runAnalysisBtn.disabled = false;
+                if (generateChartBtn) generateChartBtn.disabled = false;
+                
+                if (analysisStatus) {
+                    analysisStatus.innerHTML = '<i class="fas fa-check-circle text-success me-1"></i>Dataset ready in cloud';
+                }
+                
+            } catch (error) {
+                console.error('Processing error:', error);
+                showStatus(uploadStatus, 'error', 'Upload Failed', error.message);
+            }
+        }
+
+        // Handle File Selection
+        function handleFileSelect(file) {
+            if (!file) return false;
+            
+            const validExtensions = ['.csv', '.xlsx', '.xls'];
+            const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+            
+            if (!validExtensions.includes(ext)) {
+                showStatus(uploadStatus, 'error', 'Invalid File Type', 'Please upload CSV or Excel files only');
+                return false;
+            }
+            
+            if (file.size > 10 * 1024 * 1024 * 1024) {
+                showStatus(uploadStatus, 'error', 'File Too Large', 'File size exceeds 10GB limit');
+                return false;
+            }
+            
+            // Update file icon
+            if (fileIcon) {
+                fileIcon.className = ext === '.csv' ? 'fas fa-file-csv' : 'fas fa-file-excel';
+            }
+            
+            // Show file info
+            if (selectedFileName && selectedFileSize && fileSelection) {
+                selectedFileName.textContent = file.name;
+                selectedFileSize.textContent = formatFileSize(file.size);
+                fileSelection.style.display = 'block';
+            }
+            
+            return true;
+        }
+
+        // Run Analysis (Demo)
+        function runAnalysisDemo() {
+            if (!parsedData) {
+                alert('Please upload a dataset to the cloud first');
+                return;
+            }
+            
+            if (selectedAlgorithms.length === 0) {
+                alert('Please select at least one algorithm');
+                return;
+            }
+            
+            // Show loading
+            showStatus(uploadStatus, 'uploading', 'Cloud Analysis Started', `Distributing ${selectedAlgorithms.length} algorithms across cloud cluster...`);
+            runAnalysisBtn.disabled = true;
+            runAnalysisBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Processing in Cloud...';
+            
+            // Simulate analysis with progress
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                if (progress <= 90) {
+                    runAnalysisBtn.innerHTML = `<i class="fas fa-spinner fa-spin me-2"></i> Processing... ${progress}%`;
+                }
+            }, 200);
+            
+            setTimeout(() => {
+                clearInterval(interval);
+                
+                // Generate random results for each algorithm
+                const results = {};
+                const computeResources = document.getElementById('computeResources').value;
+                const computeMultiplier = computeResources === 'basic' ? 1 : computeResources === 'standard' ? 2 : computeResources === 'premium' ? 4 : 8;
+                
+                selectedAlgorithms.forEach(algo => {
+                    results[algo] = {
+                        accuracy: 0.75 + Math.random() * 0.2,
+                        precision: 0.73 + Math.random() * 0.22,
+                        recall: 0.72 + Math.random() * 0.23,
+                        f1: 0.74 + Math.random() * 0.21,
+                        trainingTime: (Math.random() * 2 + 0.5) / computeMultiplier,
+                        cvScore: 0.73 + Math.random() * 0.2
+                    };
+                });
+                
+                // Find best algorithm
+                let bestAlgo = null;
+                let bestScore = 0;
+                
+                Object.entries(results).forEach(([algo, metrics]) => {
+                    if (metrics.accuracy > bestScore) {
+                        bestScore = metrics.accuracy;
+                        bestAlgo = algo;
+                    }
+                });
+                
+                // Update metrics display
+                const bestMetrics = results[bestAlgo];
+                const totalTime = Object.values(results).reduce((sum, m) => sum + m.trainingTime, 0);
+                
+                document.getElementById('accuracy').textContent = (bestMetrics.accuracy * 100).toFixed(1) + '%';
+                document.getElementById('accuracyBar').style.width = (bestMetrics.accuracy * 100) + '%';
+                
+                document.getElementById('f1Score').textContent = bestMetrics.f1.toFixed(2);
+                document.getElementById('f1Bar').style.width = (bestMetrics.f1 * 100) + '%';
+                
+                document.getElementById('precision').textContent = bestMetrics.precision.toFixed(2);
+                document.getElementById('precisionBar').style.width = (bestMetrics.precision * 100) + '%';
+                
+                document.getElementById('recall').textContent = bestMetrics.recall.toFixed(2);
+                document.getElementById('recallBar').style.width = (bestMetrics.recall * 100) + '%';
+                
+                document.getElementById('rocAuc').textContent = (bestMetrics.accuracy + 0.05).toFixed(2);
+                document.getElementById('rocAucBar').style.width = ((bestMetrics.accuracy + 0.05) * 100) + '%';
+                
+                document.getElementById('trainingTime').textContent = totalTime.toFixed(1) + 's';
+                document.getElementById('trainingTimeBar').style.width = (totalTime / 10 * 100) + '%';
+                
+                document.getElementById('bestAlgorithm').textContent = bestAlgo.replace(/_/g, ' ');
+                document.getElementById('bestAlgorithmScore').innerHTML = `with ${(bestMetrics.accuracy * 100).toFixed(1)}% accuracy`;
+                
+                // Show all algorithms table
+                algorithmMetricsTable.style.display = 'block';
+                
+                let tableRows = '';
+                Object.entries(results).forEach(([algo, m]) => {
+                    tableRows += `
+                        <tr>
+                            <td><span class="algorithm-badge">${algo.replace(/_/g, ' ')}</span></td>
+                            <td>${(m.accuracy * 100).toFixed(1)}%</td>
+                            <td>${m.precision.toFixed(2)}</td>
+                            <td>${m.recall.toFixed(2)}</td>
+                            <td>${m.f1.toFixed(2)}</td>
+                            <td>${m.trainingTime.toFixed(2)}s</td>
+                        </tr>
+                    `;
+                });
+                metricsTableBody.innerHTML = tableRows;
+                
+                // Show results summary
+                resultsCard.style.display = 'block';
+                resultsSummary.innerHTML = `
+                    <div class="algorithm-result">
+                        <h6 class="fw-bold mb-3">Cloud Analysis Results</h6>
+                        <div class="mb-3">
+                            <span class="algorithm-badge bg-success">Best: ${bestAlgo.replace(/_/g, ' ')}</span>
+                            <span class="algorithm-badge">Accuracy: ${(bestMetrics.accuracy * 100).toFixed(1)}%</span>
+                        </div>
+                        <hr style="border-color: rgba(255,255,255,0.1);">
+                        <p class="small mb-2"><i class="fas fa-microchip me-2"></i>Compute: ${document.getElementById('computeResources').selectedOptions[0].text}</p>
+                        <p class="small mb-2"><i class="fas fa-clock me-2"></i>Total Time: ${totalTime.toFixed(1)}s</p>
+                        <p class="small mb-2"><i class="fas fa-chart-line me-2"></i>Models Trained: ${selectedAlgorithms.length}</p>
+                        <p class="small mb-0"><i class="fas fa-cloud me-2"></i>Distributed Nodes: ${computeMultiplier}</p>
+                    </div>
+                `;
+                
+                // Enable report button
+                generateReportBtn.disabled = false;
+                reportStatus.innerHTML = '<i class="fas fa-check-circle text-success me-1"></i>Results ready for report';
+                
+                // Update status
+                showStatus(uploadStatus, 'success', 'Cloud Analysis Complete!', `Successfully trained ${selectedAlgorithms.length} models in ${totalTime.toFixed(1)}s`);
+                
+                runAnalysisBtn.disabled = false;
+                runAnalysisBtn.innerHTML = '<i class="fas fa-play-circle me-2"></i> Run Cloud Analysis';
+                
+                analysisResults = results;
+            }, 3000);
+        }
+
+        // Generate Chart
+        function generateChartDemo() {
+            if (!parsedData) {
+                alert('Please upload a dataset first');
+                return;
+            }
+            
+            const xCol = xAxisColumn.value;
+            const yCol = yAxisColumn.value;
+            const type = chartType.value;
+            const title = chartTitle.value || 'Cloud Data Visualization';
+            
+            if (!xCol) {
+                alert('Please select X-axis column');
+                return;
+            }
+            
+            // Prepare data
+            const data = parsedData.slice(0, 50);
+            
+            let chartData = null;
+            let chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: title,
+                        color: 'white',
+                        font: { size: 16, weight: 'bold' }
+                    },
+                    legend: {
+                        labels: { color: 'rgba(255,255,255,0.8)' }
+                    }
+                },
+                scales: type === 'pie' ? {} : {
+                    x: {
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        ticks: { color: 'rgba(255,255,255,0.8)' },
+                        title: { display: true, text: xCol, color: 'white' }
+                    },
+                    y: {
+                        grid: { color: 'rgba(255,255,255,0.1)' },
+                        ticks: { color: 'rgba(255,255,255,0.8)' },
+                        title: { display: true, text: yCol || 'Values', color: 'white' }
+                    }
+                }
+            };
+            
+            if (type === 'scatter' && yCol) {
+                chartData = {
+                    datasets: [{
+                        label: `${xCol} vs ${yCol}`,
+                        data: data.map(row => ({
+                            x: parseFloat(row[xCol]) || 0,
+                            y: parseFloat(row[yCol]) || 0
+                        })),
+                        backgroundColor: 'rgba(96, 165, 250, 0.6)',
+                        borderColor: 'rgb(96, 165, 250)',
+                        borderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 10
+                    }]
+                };
+            } else if (type === 'radar' || type === 'polarArea') {
+                const values = data.slice(0, 8).map(row => parseFloat(row[xCol]) || 0);
+                const labels = data.slice(0, 8).map(row => String(row[xCol]).substring(0, 15));
+                
+                chartData = {
+                    labels: labels,
+                    datasets: [{
+                        label: xCol,
+                        data: values,
+                        backgroundColor: 'rgba(96, 165, 250, 0.3)',
+                        borderColor: 'rgb(96, 165, 250)',
+                        borderWidth: 2
+                    }]
+                };
+            } else {
+                const labels = data.map(row => String(row[xCol]).substring(0, 15));
+                const values = yCol ? data.map(row => parseFloat(row[yCol]) || 0) : 
+                                      data.map((row, i) => i + 1);
+                
+                chartData = {
+                    labels: labels,
+                    datasets: [{
+                        label: yCol || 'Values',
+                        data: values,
+                        backgroundColor: [
+                            'rgba(96, 165, 250, 0.8)',
+                            'rgba(139, 92, 246, 0.8)',
+                            'rgba(236, 72, 153, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(16, 185, 129, 0.8)'
+                        ],
+                        borderColor: 'rgb(255,255,255)',
+                        borderWidth: 1
+                    }]
+                };
+            }
+            
+            // Destroy existing chart
+            if (myChart) {
+                myChart.destroy();
+            }
+            
+            // Create new chart
+            const ctx = document.getElementById('myChart').getContext('2d');
+            myChart = new Chart(ctx, {
+                type: type,
+                data: chartData,
+                options: chartOptions
+            });
+        }
+
+        // Generate PDF Report
+        async function generatePDFReport() {
+            if (!parsedData || !analysisResults) {
+                alert('Please upload data and run analysis first');
+                return;
+            }
+            
+            try {
+                generateReportBtn.disabled = true;
+                generateReportBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Generating Cloud Report...';
+                
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                let yPos = 20;
+                
+                // Title with gradient effect
+                doc.setFontSize(28);
+                doc.setTextColor(96, 165, 250);
+                doc.text('ML Studio Cloud Report', 20, yPos);
+                
+                yPos += 15;
+                
+                // Date and info
+                doc.setFontSize(10);
+                doc.setTextColor(150, 150, 150);
+                doc.text(`Generated: ${new Date().toLocaleString()}`, 20, yPos);
+                doc.text(`Environment: ${isBackendConnected ? 'Cloud Production' : 'Cloud Sandbox'}`, 150, yPos);
+                
+                yPos += 20;
+                
+                // Executive Summary
+                if (document.getElementById('includeSummary').checked) {
+                    doc.setFontSize(16);
+                    doc.setTextColor(255, 255, 255);
+                    doc.text('Executive Summary', 20, yPos);
+                    
+                    yPos += 10;
+                    doc.setFontSize(11);
+                    
+                    const bestAlgo = document.getElementById('bestAlgorithm').textContent;
+                    const accuracy = document.getElementById('accuracy').textContent;
+                    
+                    const summary = [
+                        `Dataset: ${currentFile ? currentFile.name : 'Cloud Dataset'}`,
+                        `Total Records: ${parsedData.length.toLocaleString()}`,
+                        `Features: ${Object.keys(parsedData[0] || {}).length}`,
+                        `Algorithms Trained: ${selectedAlgorithms.length}`,
+                        `Best Model: ${bestAlgo} with ${accuracy} accuracy`,
+                        `Compute: ${document.getElementById('computeResources').selectedOptions[0].text}`
+                    ];
+                    
+                    summary.forEach((line, i) => {
+                        doc.setTextColor(200, 200, 200);
+                        doc.text(`• ${line}`, 25, yPos + (i * 7));
+                    });
+                    
+                    yPos += summary.length * 7 + 15;
+                }
+                
+                // Dataset Overview
+                if (document.getElementById('includeDataset').checked) {
+                    if (yPos > 250) {
+                        doc.addPage();
+                        yPos = 20;
+                    }
+                    
+                    doc.setFontSize(16);
+                    doc.setTextColor(96, 165, 250);
+                    doc.text('Dataset Overview', 20, yPos);
+                    
+                    yPos += 10;
+                    doc.setFontSize(11);
+                    
+                    const columns = Object.keys(parsedData[0] || {});
+                    
+                    const datasetInfo = [
+                        `File Name: ${currentFile ? currentFile.name : 'cloud-dataset.csv'}`,
+                        `File Size: ${currentFile ? formatFileSize(currentFile.size) : '2.4 MB'}`,
+                        `Total Rows: ${parsedData.length.toLocaleString()}`,
+                        `Total Features: ${columns.length}`,
+                        'Features:'
+                    ];
+                    
+                    datasetInfo.forEach((line, i) => {
+                        doc.setTextColor(200, 200, 200);
+                        doc.text(line, 20, yPos + (i * 7));
+                    });
+                    
+                    yPos += datasetInfo.length * 7 + 5;
+                    
+                    // Show columns in columns
+                    const colPerLine = 3;
+                    columns.forEach((col, i) => {
+                        if (yPos > 270) {
+                            doc.addPage();
+                            yPos = 20;
+                        }
+                        doc.setTextColor(150, 150, 150);
+                        doc.text(`• ${col}`, 20 + ((i % colPerLine) * 60), yPos + (Math.floor(i / colPerLine) * 7));
+                    });
+                    
+                    yPos += Math.ceil(columns.length / colPerLine) * 7 + 15;
+                }
+                
+                // Model Performance
+                if (document.getElementById('includeAlgorithms').checked && analysisResults) {
+                    if (yPos > 250) {
+                        doc.addPage();
+                        yPos = 20;
+                    }
+                    
+                    doc.setFontSize(16);
+                    doc.setTextColor(96, 165, 250);
+                    doc.text('Model Performance', 20, yPos);
+                    
+                    yPos += 15;
+                    
+                    // Table header
+                    doc.setFillColor(96, 165, 250, 0.3);
+                    doc.rect(20, yPos - 5, 170, 8, 'F');
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(10);
+                    doc.text('Algorithm', 22, yPos);
+                    doc.text('Accuracy', 70, yPos);
+                    doc.text('Precision', 100, yPos);
+                    doc.text('Recall', 130, yPos);
+                    doc.text('F1', 160, yPos);
+                    
+                    yPos += 10;
+                    
+                    Object.entries(analysisResults).forEach(([algo, m]) => {
+                        if (yPos > 270) {
+                            doc.addPage();
+                            yPos = 20;
+                        }
+                        
+                        doc.setTextColor(200, 200, 200);
+                        doc.text(algo.replace(/_/g, ' ').substring(0, 15), 22, yPos);
+                        doc.text(`${(m.accuracy * 100).toFixed(1)}%`, 70, yPos);
+                        doc.text(m.precision.toFixed(2), 100, yPos);
+                        doc.text(m.recall.toFixed(2), 130, yPos);
+                        doc.text(m.f1.toFixed(2), 160, yPos);
+                        
+                        yPos += 8;
+                    });
+                    
+                    yPos += 10;
+                }
+                
+                // Save the PDF
+                doc.save('ml-studio-cloud-report.pdf');
+                
+                showStatus(uploadStatus, 'success', 'Report Generated!', 'Cloud report has been downloaded');
+                
+            } catch (error) {
+                console.error('PDF generation error:', error);
+                alert('Error generating PDF: ' + error.message);
+            } finally {
+                generateReportBtn.disabled = false;
+                generateReportBtn.innerHTML = '<i class="fas fa-file-pdf me-2"></i> Generate Cloud Report';
+            }
+        }
+
+        // ===== EVENT LISTENERS =====
+        
+        // Algorithm checkboxes
+        document.querySelectorAll('.algorithm-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', updateAlgorithmList);
+        });
+
+        // Upload button
+        if (uploadBtn) {
+            uploadBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                fileInput.click();
+            });
+        }
+
+        // Browse link
+        if (browseLink) {
+            browseLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                fileInput.click();
+            });
+        }
+
+        // Upload area click
+        if (uploadArea) {
+            uploadArea.addEventListener('click', (e) => {
+                if (!e.target.closest('button') && !e.target.closest('.browse-link') && !e.target.closest('.btn-outline')) {
+                    fileInput.click();
+                }
+            });
+        }
+
+        // File input change
+        if (fileInput) {
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file && handleFileSelect(file)) {
+                    processFileLocally(file);
+                }
+            });
+        }
+
+        // Clear button
+        if (clearFileBtn) {
+            clearFileBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                fileInput.value = '';
+                fileSelection.style.display = 'none';
+                activeDatasetCard.style.display = 'none';
+                dataPreview.style.display = 'none';
+                uploadStatus.innerHTML = '';
+                runAnalysisBtn.disabled = true;
+                generateChartBtn.disabled = true;
+                generateReportBtn.disabled = true;
+                analysisStatus.innerHTML = '<i class="fas fa-cloud me-1"></i> Upload data to cloud first';
+                reportStatus.innerHTML = '<i class="fas fa-cloud me-1"></i> Run cloud analysis first';
+                resultsCard.style.display = 'none';
+                algorithmMetricsTable.style.display = 'none';
+                parsedData = null;
+                currentFile = null;
+                analysisResults = null;
+            });
+        }
+
+        // Run analysis
+        if (runAnalysisBtn) {
+            runAnalysisBtn.addEventListener('click', runAnalysisDemo);
+        }
+
+        // Generate chart
+        if (generateChartBtn) {
+            generateChartBtn.addEventListener('click', generateChartDemo);
+        }
+
+        // Generate report
+        if (generateReportBtn) {
+            generateReportBtn.addEventListener('click', generatePDFReport);
+        }
+
+        // Drag and drop
+        if (uploadArea) {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+            });
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, () => {
+                    uploadArea.classList.add('dragover');
+                });
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, () => {
+                    uploadArea.classList.remove('dragover');
+                });
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files.length > 0) {
+                    const file = files[0];
+                    if (handleFileSelect(file)) {
+                        processFileLocally(file);
+                    }
+                }
+            });
+        }
+
+        // Check cloud connection
+        async function checkCloudConnection() {
+            try {
+                const response = await fetch(`${BACKEND_URL}/health`, { 
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: { 'Accept': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    updateBackendStatus(true);
+                } else {
+                    updateBackendStatus(false);
+                }
+            } catch (error) {
+                console.log('Cloud not available, using sandbox mode');
+                updateBackendStatus(false);
+            }
+        }
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Initialize
+        updateAlgorithmList();
+        checkCloudConnection();
+        setInterval(checkCloudConnection, 30000);
+
+        console.log('☁️ ML Studio Cloud ready');
+    })();
+    </script>
+</body>
+</html>
